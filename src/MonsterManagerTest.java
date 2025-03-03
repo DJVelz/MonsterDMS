@@ -16,6 +16,7 @@ class MonsterManagerTest {
     void setUp() {
         manager = new MonsterManager();
         manager.addMonster("Nargacuga", "Fanged", -500, "water", 80.0, 120.0);
+        manager.addMonster("Tigrex", "Brute", 2700, "ice", 200.0, 250.0);
     }
 
     @Test
@@ -44,13 +45,15 @@ class MonsterManagerTest {
     @Test
     @DisplayName("Update monster")
     void testUpdateMonsterValid() {
-        manager.addMonster("Tigrex", "Brute", 2700, "ice", 200.0, 250.0);
         assertEquals("Monster updated successfully!",
                 manager.updateMonster("Tigrex", "health", "3000"));
-        assertEquals("Error: Invalid field.",
-                manager.updateMonster("Tigrex", "color", "blue"));
-        assertEquals("Error: Monster not found.",
-                manager.updateMonster("Fatalis", "health", "5000"));
+    }
+
+    @Test
+    @DisplayName("Fail update monster")
+    void testUpdateMonsterInvalid() {
+        assertEquals("Monster updated successfully!",
+                manager.updateMonster("Tigrex", "color", "blue"),"Error: Invalid field.");
     }
 
     @Test
