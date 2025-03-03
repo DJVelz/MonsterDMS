@@ -1,6 +1,7 @@
 /*
  * Dereck Velez Matias
  * CEN 3024C - Software Development I
+ * The monsters' attributes and descriptors
  */
 
 class Monster {
