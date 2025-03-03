@@ -2,6 +2,7 @@ import java.io.*;
 import java.util.*;
 
 class MonsterManager {
+
     private List<Monster> monsters = new ArrayList<>();
 
     // Load monsters from a text file
