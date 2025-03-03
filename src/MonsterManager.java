@@ -5,7 +5,7 @@ class MonsterManager {
 
     private List<Monster> monsters = new ArrayList<>();
 
-    // Load monsters from a text file
+    //Method to load monsters from a text file
     public String loadFromFile(String filePath) {
         File file = new File(filePath);
         if (!file.exists()) return "Error: File not found.";
@@ -30,7 +30,7 @@ class MonsterManager {
         }
     }
 
-    // Display all monsters
+    //Method to display all monsters
     public String displayMonsters() {
         if (monsters.isEmpty()) return "No monsters found.";
         StringBuilder sb = new StringBuilder();
@@ -38,7 +38,7 @@ class MonsterManager {
         return sb.toString();
     }
 
-    // Add a monster
+    //Method to add a monster manually
     public String addMonster(String name, String wyvernType, int health, String weakness, double lowWeight, double highWeight) {
         if (!isUniqueName(name)) return "Error: Name must be unique.";
         if (!isValidWyvernType(wyvernType)) return "Error: Invalid wyvern type.";
@@ -50,7 +50,7 @@ class MonsterManager {
         return "Monster added successfully!";
     }
 
-    // Update a monster's attribute
+    //Method to update a monster's attributes
     public String updateMonster(String name, String field, String newValue) {
         for (Monster m : monsters) {
             if (m.getName().equalsIgnoreCase(name)) {
@@ -91,27 +91,29 @@ class MonsterManager {
         return "Error: Monster not found.";
     }
 
-    // Remove a monster
+    //Method to remove a monster using its name
     public String removeMonster(String name) {
         return monsters.removeIf(m -> m.getName().equalsIgnoreCase(name)) ? "Monster removed!" : "Error: Monster not found.";
     }
 
-    // Find the heaviest monster
+    //Custom method to find the heaviest monster and display its name and weight
     public String findHeaviestMonster() {
         if (monsters.isEmpty()) return "No monsters available.";
         Monster heaviest = Collections.max(monsters, Comparator.comparingDouble(Monster::getHighWeight));
         return "Heaviest Monster: " + heaviest.getName() + " - Weight: " + heaviest.getHighWeight();
     }
 
-    // Validation Helpers
+    //Boolean to check if monster name is already taken
     private boolean isUniqueName(String name) {
         return monsters.stream().noneMatch(m -> m.getName().equalsIgnoreCase(name));
     }
 
+    //Boolean to check that the monster's type is correct
     private boolean isValidWyvernType(String type) {
         return type.equalsIgnoreCase("Flying") || type.equalsIgnoreCase("Fanged") || type.equalsIgnoreCase("Brute");
     }
 
+    //Boolean to check the weakness attribute
     private boolean isValidWeakness(String weakness) {
         return Arrays.asList("fire", "water", "thunder", "ice", "dragon").contains(weakness.toLowerCase());
     }
