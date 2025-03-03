@@ -1,3 +1,9 @@
+/*
+ * Dereck Velez Matias
+ * CEN 3024C - Software Development I
+ * Manages the CRUD operations that will be used in the application
+ */
+
 import java.io.*;
 import java.util.*;
 

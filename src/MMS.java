@@ -1,3 +1,11 @@
+/*
+ * Dereck Velez Matias
+ * CEN 3024C - Software Development I
+ * Main class - Displays a menu that allows the user to manage a Monster Hunter inspired DMS
+ * The user can input monsters manually or from a file, remove specific monsters, update their attributes,
+ * and find the heaviest monster in their database.
+ */
+
 import java.util.Scanner;
 
 public class MMS {

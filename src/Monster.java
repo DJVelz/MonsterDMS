@@ -1,3 +1,8 @@
+/*
+ * Dereck Velez Matias
+ * CEN 3024C - Software Development I
+ */
+
 class Monster {
 
     //Attributes
