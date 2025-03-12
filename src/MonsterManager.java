@@ -4,14 +4,19 @@
  * Manages the CRUD operations that will be used in the application
  */
 
+import javax.swing.*;
 import java.io.*;
 import java.util.*;
 
 class MonsterManager {
-
     private List<Monster> monsters = new ArrayList<>();
+    private DefaultListModel<String> monsterListModel;
 
-    //Method to load monsters from a text file
+    public MonsterManager(DefaultListModel<String> model) {
+        this.monsterListModel = model;
+    }
+
+    // Load monsters from a file and update the UI
     public String loadFromFile(String filePath) {
         File file = new File(filePath);
         if (!file.exists()) return "Error: File not found.";
@@ -27,7 +32,10 @@ class MonsterManager {
                     String weakness = data[3].trim();
                     double lowWeight = Double.parseDouble(data[4].trim());
                     double highWeight = Double.parseDouble(data[5].trim());
-                    monsters.add(new Monster(name, wyvernType, health, weakness, lowWeight, highWeight));
+
+                    if (addMonster(name, wyvernType, health, weakness, lowWeight, highWeight).contains("successfully")) {
+                        continue;
+                    }
                 }
             }
             return "Monsters loaded successfully!";
@@ -36,15 +44,7 @@ class MonsterManager {
         }
     }
 
-    //Method to display all monsters
-    public String displayMonsters() {
-        if (monsters.isEmpty()) return "No monsters found.";
-        StringBuilder sb = new StringBuilder();
-        for (Monster m : monsters) sb.append(m).append("\n");
-        return sb.toString();
-    }
-
-    //Method to add a monster manually
+    // Add a new monster and update the list model
     public String addMonster(String name, String wyvernType, int health, String weakness, double lowWeight, double highWeight) {
         if (!isUniqueName(name)) return "Error: Name must be unique.";
         if (!isValidWyvernType(wyvernType)) return "Error: Invalid wyvern type.";
@@ -53,73 +53,88 @@ class MonsterManager {
         if (lowWeight < 0 || highWeight < lowWeight) return "Error: Invalid weight values.";
 
         monsters.add(new Monster(name, wyvernType, health, weakness, lowWeight, highWeight));
+        monsterListModel.addElement(name); // Update the UI list
         return "Monster added successfully!";
     }
 
-    //Method to update a monster's attributes
-    public String updateMonster(String name, String field, String newValue) {
-        for (Monster m : monsters) {
-            if (m.getName().equalsIgnoreCase(name)) {
-                try {
-                    switch (field.toLowerCase()) {
-                        case "wyverntype":
-                            if (!isValidWyvernType(newValue)) return "Error: Invalid wyvern type.";
-                            m.setWyvernType(newValue);
-                            break;
-                        case "health":
-                            int health = Integer.parseInt(newValue);
-                            if (health <= 0) return "Error: Health must be greater than 0.";
-                            m.setHealth(health);
-                            break;
-                        case "weakness":
-                            if (!isValidWeakness(newValue)) return "Error: Invalid weakness.";
-                            m.setWeakness(newValue);
-                            break;
-                        case "lowweight":
-                            double lowWeight = Double.parseDouble(newValue);
-                            if (lowWeight < 0 || lowWeight > m.getHighWeight()) return "Error: Invalid low weight.";
-                            m.setLowWeight(lowWeight);
-                            break;
-                        case "highweight":
-                            double highWeight = Double.parseDouble(newValue);
-                            if (highWeight < m.getLowWeight()) return "Error: High weight must be >= low weight.";
-                            m.setHighWeight(highWeight);
-                            break;
-                        default:
-                            return "Error: Invalid field.";
-                    }
-                    return "Monster updated successfully!";
-                } catch (NumberFormatException e) {
-                    return "Error: Invalid number format.";
-                }
+    // Update a monster's attribute
+    public String updateMonster(Monster monster, String field, String newValue) {
+        try {
+            switch (field.toLowerCase()) {
+                case "name":
+                    if (newValue == null || newValue.trim().isEmpty()) return "Error: Name cannot be empty.";
+                    if (!isUniqueName(newValue)) return "Error: A monster with that name already exists.";
+                    monster.setName(newValue);  // Update the name
+                    break;
+                case "wyverntype":
+                    if (!isValidWyvernType(newValue)) return "Error: Invalid wyvern type.";
+                    monster.setWyvernType(newValue);
+                    break;
+                case "health":
+                    int health = Integer.parseInt(newValue);
+                    if (health <= 0) return "Error: Health must be greater than 0.";
+                    monster.setHealth(health);
+                    break;
+                case "weakness":
+                    if (!isValidWeakness(newValue)) return "Error: Invalid weakness.";
+                    monster.setWeakness(newValue);
+                    break;
+                case "lowweight":
+                    double lowWeight = Double.parseDouble(newValue);
+                    if (lowWeight < 0 || lowWeight > monster.getHighWeight()) return "Error: Invalid low weight.";
+                    monster.setLowWeight(lowWeight);
+                    break;
+                case "highweight":
+                    double highWeight = Double.parseDouble(newValue);
+                    if (highWeight < monster.getLowWeight()) return "Error: High weight must be >= low weight.";
+                    monster.setHighWeight(highWeight);
+                    break;
+                default:
+                    return "Error: Invalid field.";
             }
+            return "Monster updated successfully!";
+        } catch (NumberFormatException e) {
+            return "Error: Invalid number format.";
         }
-        return "Error: Monster not found.";
     }
 
-    //Method to remove a monster using its name
+    // Remove a monster and update UI
     public String removeMonster(String name) {
-        return monsters.removeIf(m -> m.getName().equalsIgnoreCase(name)) ? "Monster removed!" : "Error: Monster not found.";
+        boolean removed = monsters.removeIf(m -> m.getName().equalsIgnoreCase(name));
+        if (removed) {
+            monsterListModel.removeElement(name);
+            return "Monster removed!";
+        } else {
+            return "Error: Monster not found.";
+        }
     }
 
-    //Custom method to find the heaviest monster and display its name and weight
+    // Find the heaviest monster
     public String findHeaviestMonster() {
         if (monsters.isEmpty()) return "No monsters available.";
         Monster heaviest = Collections.max(monsters, Comparator.comparingDouble(Monster::getHighWeight));
         return "Heaviest Monster: " + heaviest.getName() + " - Weight: " + heaviest.getHighWeight();
     }
 
-    //Boolean to check if monster name is already taken
+    // Return a monster by name
+    public Monster getMonsterByName(String name) {
+        for (Monster m : monsters) {
+            if (m.getName().equalsIgnoreCase(name)) {
+                return m;
+            }
+        }
+        return null;
+    }
+
+    // Validation helper methods
     private boolean isUniqueName(String name) {
         return monsters.stream().noneMatch(m -> m.getName().equalsIgnoreCase(name));
     }
 
-    //Boolean to check that the monster's type is correct
     private boolean isValidWyvernType(String type) {
         return type.equalsIgnoreCase("Flying") || type.equalsIgnoreCase("Fanged") || type.equalsIgnoreCase("Brute");
     }
 
-    //Boolean to check the weakness attribute
     private boolean isValidWeakness(String weakness) {
         return Arrays.asList("fire", "water", "thunder", "ice", "dragon").contains(weakness.toLowerCase());
     }
