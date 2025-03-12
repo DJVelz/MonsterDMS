@@ -62,8 +62,10 @@ class MonsterManager {
         try {
             switch (field.toLowerCase()) {
                 case "name":
-                    if (newValue == null || newValue.trim().isEmpty()) return "Error: Name cannot be empty.";
-                    if (!isUniqueName(newValue)) return "Error: A monster with that name already exists.";
+                    if (newValue == null || newValue.trim().isEmpty())
+                        return "Error: Name cannot be empty.";
+                    if (!newValue.equals(monster.getName()) && !isUniqueName(newValue))
+                        return "Error: A monster with that name already exists.";
                     monster.setName(newValue);  // Update the name
                     break;
                 case "wyverntype":
@@ -96,6 +98,10 @@ class MonsterManager {
         } catch (NumberFormatException e) {
             return "Error: Invalid number format.";
         }
+    }
+
+    public List<Monster> getAllMonsters() {
+        return monsters; // assuming `monsters` is your list of monsters
     }
 
     // Remove a monster and update UI

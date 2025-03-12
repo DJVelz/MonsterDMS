@@ -13,24 +13,21 @@ public class MMSGUI extends JFrame {
 
     public MMSGUI() {
         setTitle("Monster Management System");
-        setSize(800, 600);
+        setSize(1920, 1080);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
+
+
         // Initialize components
         monsterListModel = new DefaultListModel<>();
-        monsterJList = new JList<>(monsterListModel);
-        monsterJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        monsterJList.addListSelectionListener(e -> displayMonsterDetails());
-
-        monsterDetails = new JTextArea(10, 30);
-        monsterDetails.setEditable(false);
-
-        loadButton = new JButton("Load Monsters");
-        removeButton = new JButton("Remove Selected");
-        heaviestButton = new JButton("Find Heaviest");
-        addButton = new JButton("Add Monster");
-        updateButton = new JButton("Update Monster");
+        monsterJList.setModel(monsterListModel);
+        frameInit();
+        monsterJList.addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                displayMonsterDetails();
+            }
+        });
 
         // Initialize MonsterManager
         monsterManager = new MonsterManager(monsterListModel);
@@ -43,13 +40,6 @@ public class MMSGUI extends JFrame {
         updateButton.addActionListener(e -> updateMonsterDetails());
 
         // Layout setup
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.add(loadButton);
-        buttonPanel.add(removeButton);
-        buttonPanel.add(heaviestButton);
-        buttonPanel.add(addButton);
-        buttonPanel.add(updateButton);
-
         JScrollPane listScrollPane = new JScrollPane(monsterJList);
         JScrollPane detailsScrollPane = new JScrollPane(monsterDetails);
 
@@ -148,6 +138,14 @@ public class MMSGUI extends JFrame {
         String result = monsterManager.updateMonster(selectedMonster, field, newValue);
         JOptionPane.showMessageDialog(this, result);
 
+        // If the update was successful, refresh the list
+        if (result.equals("Monster updated successfully!")) {
+            // Update the list model to reflect the name change
+            monsterListModel.clear();
+            for (Monster monster : monsterManager.getAllMonsters()) {
+                monsterListModel.addElement(monster.getName());
+            }
+        }
     }
 
 
@@ -157,6 +155,11 @@ public class MMSGUI extends JFrame {
 
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(MMSGUI::new);
+        // Create and display the form on the Event Dispatch Thread
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                new MMSGUI().setVisible(true);
+            }
+        });
     }
 }

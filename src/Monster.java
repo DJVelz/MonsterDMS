@@ -67,7 +67,7 @@ class Monster {
 
     @Override
     public String toString() {
-        return name + " (" + wyvernType + ") - HP: " + health + ", Weakness: " + weakness +
-                ", Weight: " + lowWeight + "-" + highWeight;
+        return name + "\nWyvern Type: " + wyvernType + "\nTotal HP: " + health + "\nWeakness: " + weakness +
+                "\nWeight Range: " + lowWeight + "-" + highWeight;
     }
 }
