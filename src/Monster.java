@@ -45,6 +45,10 @@ class Monster {
     }
 
     //Setters
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public void setWyvernType(String wyvernType) {
         this.wyvernType = wyvernType;
     }
