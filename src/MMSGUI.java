@@ -1,3 +1,14 @@
+/*
+ * Dereck Velez Matias
+ * CEN 3024C - Software Development I
+ * March 12, 2025
+ * MMSGUI.java
+ * This application will let the user manager their Monster Hunter journal in multiple ways, including:
+ * loading multiple monsters from a text file, manually adding a monster, deleting a monster, updating a monster's
+ * attributes, and find which monster is the heaviest. It will return a list of monsters and their attributes
+ * when selected.
+ */
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -10,6 +21,7 @@ public class MMSGUI extends JFrame {
     private JPanel buttonPanel;
     private JButton addButton;
     private JButton updateButton;
+    private JButton exitButton;
 
     public MMSGUI() {
         setTitle("Monster Management System");
@@ -17,9 +29,7 @@ public class MMSGUI extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
-
-
-        // Initialize components
+        //Initialize components
         monsterListModel = new DefaultListModel<>();
         monsterJList.setModel(monsterListModel);
         frameInit();
@@ -28,28 +38,30 @@ public class MMSGUI extends JFrame {
                 displayMonsterDetails();
             }
         });
-
-        // Initialize MonsterManager
         monsterManager = new MonsterManager(monsterListModel);
 
-        // Button actions
+        //Button actions
         loadButton.addActionListener(e -> loadMonsters());
         removeButton.addActionListener(e -> removeSelectedMonster());
         heaviestButton.addActionListener(e -> showHeaviestMonster());
         addButton.addActionListener(e -> addMonsterManually());
         updateButton.addActionListener(e -> updateMonsterDetails());
+        exitButton.addActionListener(e -> exitApplication());
 
-        // Layout setup
+
         JScrollPane listScrollPane = new JScrollPane(monsterJList);
         JScrollPane detailsScrollPane = new JScrollPane(monsterDetails);
-
         add(listScrollPane, BorderLayout.WEST);
         add(detailsScrollPane, BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.NORTH);
-
         setVisible(true);
     }
 
+    /* displayMonsterDetails
+     * Input: Selected monster
+     * Output: Full monster attributes
+     * Displays selected monster's attributes on the right side of the screen
+     */
     private void displayMonsterDetails() {
         String selected = monsterJList.getSelectedValue();
         if (selected != null) {
@@ -62,6 +74,11 @@ public class MMSGUI extends JFrame {
         }
     }
 
+    /* loadMonsters
+     * Input: Text file path
+     * Output: Adding valid monsters to the list
+     * Prompts user for a text file path to add a batch of monsters
+     */
     private void loadMonsters() {
         String filePath = JOptionPane.showInputDialog("Enter file path:");
         if (filePath != null && !filePath.trim().isEmpty()) {
@@ -69,8 +86,14 @@ public class MMSGUI extends JFrame {
         }
     }
 
+    /* addMonsterManually
+     * Input: Monster attributes
+     * Output: Monster added
+     * Prompts user for each monster attribute to create their own journal entry, validates their inputs,
+     * and uses the information to add the monsters to the app
+     */
     private void addMonsterManually() {
-        // Collect monster details from the user
+
         String name = JOptionPane.showInputDialog("Enter Monster Name:");
         String wyvernType = JOptionPane.showInputDialog("Enter Wyvern Type (Flying, Fanged, Brute):");
         String healthStr = JOptionPane.showInputDialog("Enter Health (must be > 0):");
@@ -78,7 +101,6 @@ public class MMSGUI extends JFrame {
         String lowWeightStr = JOptionPane.showInputDialog("Enter Low Weight:");
         String highWeightStr = JOptionPane.showInputDialog("Enter High Weight:");
 
-        // Validate inputs
         if (name == null || wyvernType == null || healthStr == null || weakness == null || lowWeightStr == null || highWeightStr == null) {
             JOptionPane.showMessageDialog(this, "Monster creation canceled.");
             return;
@@ -89,7 +111,6 @@ public class MMSGUI extends JFrame {
             double lowWeight = Double.parseDouble(lowWeightStr);
             double highWeight = Double.parseDouble(highWeightStr);
 
-            // Call the MonsterManager method to add the monster
             String result = monsterManager.addMonster(name, wyvernType, health, weakness, lowWeight, highWeight);
             JOptionPane.showMessageDialog(this, result);
 
@@ -98,6 +119,11 @@ public class MMSGUI extends JFrame {
         }
     }
 
+    /* removeSelectedMonster
+     * Input: Selected monster
+     * Output: Monster removed
+     * This method lets you delete a monster from the app by selecting it and then clicking the remove button
+     */
     private void removeSelectedMonster() {
         String selected = monsterJList.getSelectedValue();
         if (selected != null) {
@@ -106,8 +132,13 @@ public class MMSGUI extends JFrame {
         }
     }
 
+    /* updateMonsterDetails
+     * Input: An attribute to update
+     * Output: New attribute
+     * This method lets you update individual attributes for a selected monster. It also refreshes the monster list
+     * upon successfully updating an attribute
+     */
     private void updateMonsterDetails() {
-        // Get the selected monster from the JList
         String selected = monsterJList.getSelectedValue();
         if (selected == null) {
             JOptionPane.showMessageDialog(this, "Please select a monster to update.");
@@ -120,27 +151,22 @@ public class MMSGUI extends JFrame {
             return;
         }
 
-        // Ask for the field to update (wyvernType, health, weakness, etc.)
         String field = JOptionPane.showInputDialog("Enter the field to update (name, wyverntype, health, weakness, lowweight, highweight):");
         if (field == null || field.trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Invalid field.");
             return;
         }
 
-        // Ask for the new value for the selected field
         String newValue = JOptionPane.showInputDialog("Enter the new value for " + field + ":");
         if (newValue == null || newValue.trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Invalid value.");
             return;
         }
 
-        // Call the updateMonster method from MonsterManager with the selected monster
         String result = monsterManager.updateMonster(selectedMonster, field, newValue);
         JOptionPane.showMessageDialog(this, result);
 
-        // If the update was successful, refresh the list
         if (result.equals("Monster updated successfully!")) {
-            // Update the list model to reflect the name change
             monsterListModel.clear();
             for (Monster monster : monsterManager.getAllMonsters()) {
                 monsterListModel.addElement(monster.getName());
@@ -148,11 +174,33 @@ public class MMSGUI extends JFrame {
         }
     }
 
-
+    /* showHeaviestMonster
+     * Input: Button click
+     * Output: Message
+     * Clicking the button will display the heaviest monster's name and weight
+     */
     private void showHeaviestMonster() {
         JOptionPane.showMessageDialog(this, monsterManager.findHeaviestMonster());
     }
 
+    /* exitApplication
+     * Input: Button press
+     * Output: Option pane
+     * Clicking the exit button asks the user if they want to exit, if yes then the app closes, if not then they
+     * can continue
+     */
+    private void exitApplication() {
+        int confirm = JOptionPane.showConfirmDialog(
+                this,
+                "Are you sure you want to exit?",
+                "Exit Confirmation",
+                JOptionPane.YES_NO_OPTION
+        );
+
+        if (confirm == JOptionPane.YES_OPTION) {
+            System.exit(0);
+        }
+    }
 
     public static void main(String[] args) {
         // Create and display the form on the Event Dispatch Thread

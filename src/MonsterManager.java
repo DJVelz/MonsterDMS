@@ -11,12 +11,19 @@ import java.util.*;
 class MonsterManager {
     private List<Monster> monsters = new ArrayList<>();
     private DefaultListModel<String> monsterListModel;
-
+    public List<Monster> getAllMonsters() {
+        return monsters;
+    }
     public MonsterManager(DefaultListModel<String> model) {
         this.monsterListModel = model;
     }
 
-    // Load monsters from a file and update the UI
+    /* loadFromFile
+     * Input: File path
+     * Output: String
+     * This method prompts the user for a file path, checks if the information can be used properly, and if everything
+     * is correct adds a batch of monsters to our app
+     */
     public String loadFromFile(String filePath) {
         File file = new File(filePath);
         if (!file.exists()) return "Error: File not found.";
@@ -44,7 +51,11 @@ class MonsterManager {
         }
     }
 
-    // Add a new monster and update the list model
+    /* addMonster
+     * Input: Monster attributes
+     * Output: String
+     * This method collects monster attributes to manually create a monster
+     */
     public String addMonster(String name, String wyvernType, int health, String weakness, double lowWeight, double highWeight) {
         if (!isUniqueName(name)) return "Error: Name must be unique.";
         if (!isValidWyvernType(wyvernType)) return "Error: Invalid wyvern type.";
@@ -53,11 +64,15 @@ class MonsterManager {
         if (lowWeight < 0 || highWeight < lowWeight) return "Error: Invalid weight values.";
 
         monsters.add(new Monster(name, wyvernType, health, weakness, lowWeight, highWeight));
-        monsterListModel.addElement(name); // Update the UI list
+        monsterListModel.addElement(name);
         return "Monster added successfully!";
     }
 
-    // Update a monster's attribute
+    /* updateMonster
+     * Input: Attribute to update
+     * Output: String
+     * Allows the user to update a given monster's attributes
+     */
     public String updateMonster(Monster monster, String field, String newValue) {
         try {
             switch (field.toLowerCase()) {
@@ -100,11 +115,11 @@ class MonsterManager {
         }
     }
 
-    public List<Monster> getAllMonsters() {
-        return monsters; // assuming `monsters` is your list of monsters
-    }
-
-    // Remove a monster and update UI
+    /* removeMonster
+     * Input: Monster name
+     * Output: String
+     * Deletes a given monster
+     */
     public String removeMonster(String name) {
         boolean removed = monsters.removeIf(m -> m.getName().equalsIgnoreCase(name));
         if (removed) {
@@ -115,14 +130,22 @@ class MonsterManager {
         }
     }
 
-    // Find the heaviest monster
+    /* findHeaviestMonster
+     * Input: None
+     * Output: String
+     * Finds and displays the heaviest monster's name and weight
+     */
     public String findHeaviestMonster() {
         if (monsters.isEmpty()) return "No monsters available.";
         Monster heaviest = Collections.max(monsters, Comparator.comparingDouble(Monster::getHighWeight));
         return "Heaviest Monster: " + heaviest.getName() + " - Weight: " + heaviest.getHighWeight();
     }
 
-    // Return a monster by name
+    /* getMonsterByName
+     * Input: None
+     * Output: Monster
+     * Finds a monster by name to help other methods select a specific monster
+     */
     public Monster getMonsterByName(String name) {
         for (Monster m : monsters) {
             if (m.getName().equalsIgnoreCase(name)) {
@@ -132,7 +155,9 @@ class MonsterManager {
         return null;
     }
 
-    // Validation helper methods
+    /* isUniqueName, isValidWyvernType, isValidWeakness
+     * Helper methods to validate monster attributes
+     */
     private boolean isUniqueName(String name) {
         return monsters.stream().noneMatch(m -> m.getName().equalsIgnoreCase(name));
     }
