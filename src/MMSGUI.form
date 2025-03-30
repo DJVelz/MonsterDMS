@@ -7,12 +7,12 @@
     </constraints>
     <properties>
       <background color="-2836083"/>
-      <enabled value="false"/>
+      <enabled value="true"/>
       <foreground color="-2836083"/>
     </properties>
     <border type="none"/>
     <children>
-      <scrollpane id="41139">
+      <scrollpane id="41139" binding="monsterInfo">
         <constraints>
           <grid row="2" column="0" row-span="1" col-span="3" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -63,7 +63,7 @@
           <background color="-5864098"/>
           <font name="Bookman Old Style" size="24"/>
           <foreground color="-12306390"/>
-          <text value="Add Monster"/>
+          <text value="Add New Monster"/>
         </properties>
       </component>
       <component id="3851c" class="javax.swing.JButton" binding="loadButton">
@@ -74,7 +74,7 @@
           <background color="-5864098"/>
           <font name="Bookman Old Style" size="24"/>
           <foreground color="-12306390"/>
-          <text value="Load Text File"/>
+          <text value="Load SQLite Database"/>
         </properties>
       </component>
       <component id="b14bf" class="javax.swing.JButton" binding="removeButton">
