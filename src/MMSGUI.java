@@ -1,3 +1,5 @@
+import javax.swing.*;
+
 /**
  * Dereck Velez Matias
  * CEN 3024C - Software Development I
@@ -6,10 +8,8 @@
  * loading multiple monsters from a text file, manually adding a monster, deleting a monster, updating a monster's
  * attributes, and find which monster is the heaviest. It will return a list of monsters and their attributes
  * when selected.
+ * This class uses the methods from MonsterManager and implements a GUI for easier interaction
  */
-
-import javax.swing.*;
-
 public class MMSGUI extends JFrame {
     private MonsterManager monsterManager;
     private DefaultListModel<String> monsterListModel;

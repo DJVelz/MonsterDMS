@@ -4,8 +4,7 @@
  * Monster.java
  * The Monster class contains the monsters' attributes
  */
-
-class Monster {
+public class Monster {
 
     //Attributes
     private String name;

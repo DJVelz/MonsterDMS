@@ -1,13 +1,13 @@
+
+import java.sql.*;
+import java.util.*;
+
 /**
  * Dereck Velez Matias
  * CEN 3024C - Software Development I
  * MonsterManager.java
  * Manages the CRUD operations that will be used in the application
  */
-
-import java.sql.*;
-import java.util.*;
-
 public class MonsterManager {
     private Connection connection;
 
