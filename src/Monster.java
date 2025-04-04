@@ -1,7 +1,8 @@
-/*
+/**
  * Dereck Velez Matias
  * CEN 3024C - Software Development I
- * The monsters' attributes and descriptors
+ * Monster.java
+ * The Monster class contains the monsters' attributes
  */
 
 class Monster {
@@ -14,7 +15,15 @@ class Monster {
     private double lowWeight;
     private double highWeight;
 
-    //Constructor
+    /**
+     * This constructs monster objects
+     * @param name The name of a monster
+     * @param wyvernType Determines if the monster is a Flying, Fanged, or Brute type
+     * @param health The amount of health a monster has
+     * @param weakness What element the monster is weakest to
+     * @param lowWeight The lowest weight encountered
+     * @param highWeight The highest weight encountered
+     */
     public Monster(String name, String wyvernType, int health, String weakness, double lowWeight, double highWeight) {
         this.name = name;
         this.wyvernType = wyvernType;

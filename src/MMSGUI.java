@@ -1,7 +1,6 @@
-/*
+/**
  * Dereck Velez Matias
  * CEN 3024C - Software Development I
- * March 12, 2025
  * MMSGUI.java
  * This application will let the user manager their Monster Hunter journal in multiple ways, including:
  * loading multiple monsters from a text file, manually adding a monster, deleting a monster, updating a monster's
@@ -48,10 +47,9 @@ public class MMSGUI extends JFrame {
         exitButton.addActionListener(e -> exitApplication());
     }
 
-    /* displayMonsterDetails
-     * Input: Selected monster
-     * Output: Full monster attributes
-     * Displays selected monster's attributes on the right side of the screen
+    /**
+     * displayMonsterDetails displays all the attributes from the selected monster on the GUI on
+     * the right side of the screen after selecting that monster's name on the left
      */
     private void displayMonsterDetails() {
         String selected = monsterJList.getSelectedValue();
@@ -65,10 +63,9 @@ public class MMSGUI extends JFrame {
         }
     }
 
-    /* loadMonsters
-     * Input: SQLite file path
-     * Output: Adding valid monsters to the list
-     * Prompts user for a text file path to add a batch of monsters
+    /**
+     * Uses the MonsterManager constructor to establish a connection to a SQLite database
+     * through the use of a button
      */
     private void loadMonsters() {
         String dbPath = JOptionPane.showInputDialog("Enter the path to the SQLite database:");
@@ -80,10 +77,9 @@ public class MMSGUI extends JFrame {
         }
     }
 
-    /* refreshMonsterList
-     * Input: None
-     * Output: Monster list
-     * Keeps the list up to date on the GUI's end
+    /**
+     * refreshMonsterList keeps the list of monsters on the left refreshed in case a monster is
+     * added, updated, or removed
      */
     private void refreshMonsterList() {
         monsterListModel.clear();
@@ -92,11 +88,9 @@ public class MMSGUI extends JFrame {
         }
     }
 
-    /* addMonsterManually
-     * Input: Monster attributes
-     * Output: Monster added
-     * Prompts user for each monster attribute to create their own journal entry, validates their inputs,
-     * and uses the information to add the monsters to the app
+    /**
+     * addMonsterManually gives the user pop-up prompts to add a monster using addMonster from
+     * the MonsterManager class
      */
     private void addMonsterManually() {
         String name = JOptionPane.showInputDialog("Enter Monster Name:");
@@ -122,10 +116,9 @@ public class MMSGUI extends JFrame {
         }
     }
 
-    /* removeSelectedMonster
-     * Input: Selected monster
-     * Output: Monster removed
-     * This method lets you delete a monster from the app by selecting it and then clicking the remove button
+    /**
+     * removeSelected monster uses removeMonster from the MonsterManager class to delete a
+     * selected monster from the database
      */
     private void removeSelectedMonster() {
         String selectedMonster = monsterJList.getSelectedValue();
@@ -138,21 +131,18 @@ public class MMSGUI extends JFrame {
         }
     }
 
-    /* showHeaviestMonster
-     * Input: Button click
-     * Output: Message
-     * Clicking the button will display the heaviest monster's name and weight
+    /**
+     * showHeaviestMonster uses findHeaviestMonster to display the name and weight of the heaviest
+     * monster to the user
      */
     private void showHeaviestMonster() {
         String result = monsterManager.findHeaviestMonster();
         JOptionPane.showMessageDialog(this, result);
     }
 
-    /* updateMonsterDetails
-     * Input: An attribute to update
-     * Output: New attribute
-     * This method lets you update individual attributes for a selected monster. It also refreshes the monster list
-     * upon successfully updating an attribute
+    /**
+     * updateMonsterDetails prompts the user with what attribute they want to update via
+     * updateMonster from MonsterManager
      */
     private void updateMonsterDetails() {
         String selectedMonster = monsterJList.getSelectedValue();
@@ -169,11 +159,8 @@ public class MMSGUI extends JFrame {
         }
     }
 
-    /* exitApplication
-     * Input: Button press
-     * Output: Option pane
-     * Clicking the exit button asks the user if they want to exit, if yes then the app closes, if not then they
-     * can continue
+    /**
+     *
      */
     private void exitApplication() {
         int confirm = JOptionPane.showConfirmDialog(
@@ -188,6 +175,10 @@ public class MMSGUI extends JFrame {
         }
     }
 
+    /**
+     * The main method starts the application
+     * @param args
+     */
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new MMSGUI());
     }

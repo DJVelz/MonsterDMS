@@ -1,6 +1,7 @@
-/*
+/**
  * Dereck Velez Matias
  * CEN 3024C - Software Development I
+ * MonsterManager.java
  * Manages the CRUD operations that will be used in the application
  */
 
@@ -10,7 +11,10 @@ import java.util.*;
 public class MonsterManager {
     private Connection connection;
 
-    //Constructor
+    /**
+     * The constructor establishes a connection with the SQLite database
+     * @param dbPath The file path for the database
+     */
     public MonsterManager(String dbPath) {
         try {
             String url = "jdbc:sqlite:" + dbPath;
@@ -22,10 +26,16 @@ public class MonsterManager {
         }
     }
 
-    /* addMonster
-     * Input: Monster attributes
-     * Output: String
-     * This method collects monster attributes to manually create a monster
+    /**
+     * The addMonster method inserts a new monster into the database
+     * @param name The name of a monster
+     * @param wyvernType Determines if the monster is a Flying, Fanged, or Brute type
+     * @param health The amount of health a monster has
+     * @param weakness What element the monster is weakest to
+     * @param lowWeight The lowest weight encountered
+     * @param highWeight The highest weight encountered
+     * @return Returns a message letting the user know if their monster was successfully or unsuccessfully
+     * added to the database
      */
     public String addMonster(String name, String wyvernType, int health, String weakness, double lowWeight, double highWeight) {
         String sql = "INSERT INTO monsters(name, wyvernType, health, weakness, lowWeight, highWeight) VALUES(?, ?, ?, ?, ?, ?)";
@@ -44,10 +54,12 @@ public class MonsterManager {
         }
     }
 
-    /* updateMonster
-     * Input: Attribute to update
-     * Output: String
-     * Allows the user to update a given monster's attributes
+    /**
+     * The updateMonster method updates one attribute from a selected monster
+     * @param name The name of a monster being selected
+     * @param field Which attribute you want to update (name, wyvernType, health, weakness, lowWeight, or highWeight)
+     * @param newValue The new value for the selected attribute
+     * @return Returns a message for either a successful change or what error didn't allow the update
      */
     public String updateMonster(String name, String field, String newValue) {
         String sql = "UPDATE monsters SET " + field + " = ? WHERE name = ?";
@@ -62,10 +74,10 @@ public class MonsterManager {
         }
     }
 
-    /* removeMonster
-     * Input: Monster name
-     * Output: String
-     * Deletes a given monster
+    /**
+     * The removeMonster deletes a monster from the database using their name
+     * @param name The name of a monster being selected
+     * @return Returns a message for success or error of removing the monster
      */
     public String removeMonster(String name) {
         String sql = "DELETE FROM monsters WHERE name = ?";
@@ -79,6 +91,10 @@ public class MonsterManager {
         }
     }
 
+    /**
+     * getAllMonsters is used to find all monsters in the database to keep the list refreshed
+     * @return All monsters in the database
+     */
     public List<Monster> getAllMonsters() {
         List<Monster> monsters = new ArrayList<>();
         String sql = "SELECT * FROM monsters";
@@ -100,10 +116,10 @@ public class MonsterManager {
         return monsters;
     }
 
-    /* getMonsterByName
-     * Input: None
-     * Output: Monster
-     * Finds a monster by name to help other methods select a specific monster
+    /**
+     * getMonsterByName helps find monsters using their names
+     * @param name The name of a monster being selected
+     * @return Returns the attributes for the monster
      */
     public Monster getMonsterByName(String name) {
         String sql = "SELECT * FROM monsters WHERE name = ?";
@@ -126,10 +142,9 @@ public class MonsterManager {
         return null;
     }
 
-    /* findHeaviestMonster
-     * Input: None
-     * Output: String
-     * Finds and displays the heaviest monster's name and weight
+    /**
+     * findHeaviestMonster searches for the heaviest monster in the database
+     * @return Returns the name and weight of the heaviest monster in the database if available
      */
     public String findHeaviestMonster() {
         String sql = "SELECT name, highWeight FROM monsters ORDER BY highWeight DESC LIMIT 1";
