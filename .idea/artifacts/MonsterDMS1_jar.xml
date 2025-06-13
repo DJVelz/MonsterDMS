@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="MonsterDMS1:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/MonsterDMS1_jar</output-path>
+    <root id="archive" name="MonsterDMS1.jar">
+      <element id="module-output" name="MonsterDMS1" />
+      <element id="extracted-dir" path="$USER_HOME$/Downloads/sqlite-jdbc-3.49.1.0.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
