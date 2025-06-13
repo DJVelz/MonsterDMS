@@ -160,7 +160,7 @@ public class MMSGUI extends JFrame {
     }
 
     /**
-     *
+     * exitApplication provides a menu to confirm if the user wants to exit
      */
     private void exitApplication() {
         int confirm = JOptionPane.showConfirmDialog(
